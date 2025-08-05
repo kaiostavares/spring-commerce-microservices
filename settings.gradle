@@ -1,0 +1,3 @@
+rootProject.name = 'spring-commerce-microservices'
+
+include 'product-service'

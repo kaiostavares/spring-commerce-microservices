@@ -1,0 +1,31 @@
+/**
+ * Gradle build configuration for enabling Mockito's inline mock maker with Java agent support.
+ *
+ * This setup ensures compatibility with Java 21+ where dynamic agent attachment is restricted.
+ *
+ * The `mockitoAgent` configuration declares Mockito explicitly as a Java agent to avoid runtime warnings,
+ * and enables advanced mocking capabilities (like mocking final classes).
+ *
+ * References:
+ * - Mockito documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+ * - Java agent loading policy: https://openjdk.org/jeps/451
+ */
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    mockitoAgent
+}
+
+dependencies {
+    testImplementation "org.mockito:mockito-core"
+    mockitoAgent("org.mockito:mockito-core:$mockitoVersion") {
+        transitive = false
+    }
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+}

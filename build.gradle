@@ -1,0 +1,51 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.4' apply false
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.kaiostavares'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+allprojects {
+	repositories {
+		mavenCentral()
+	}
+}
+
+ext {
+	mockitoVersion = '5.18.0'
+	lombokVersion = '1.18.38'
+	testcontainersVersion = '1.21.3'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom SpringBootPlugin.BOM_COORDINATES
+		mavenBom "org.testcontainers:testcontainers-bom:$testcontainersVersion"
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs.add("-parameters")
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'io.spring.dependency-management'
+
+	dependencies {
+		compileOnly "org.projectlombok:lombok:$lombokVersion"
+		annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	}
+}
