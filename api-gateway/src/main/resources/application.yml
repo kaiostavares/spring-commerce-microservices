@@ -1,0 +1,10 @@
+services:
+  products:
+    url: http://localhost:8081
+    path: /api/products
+  orders:
+    url: http://localhost:8082
+    path: /api/orders
+  inventory:
+    url: http://localhost:8083
+    path: /api/inventory

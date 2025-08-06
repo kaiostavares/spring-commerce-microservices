@@ -25,13 +25,7 @@ ext {
 	mockitoVersion = '5.18.0'
 	lombokVersion = '1.18.38'
 	testcontainersVersion = '1.21.3'
-}
-
-dependencyManagement {
-	imports {
-		mavenBom SpringBootPlugin.BOM_COORDINATES
-		mavenBom "org.testcontainers:testcontainers-bom:$testcontainersVersion"
-	}
+	springCloudVersion = '2025.0.0'
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -41,6 +35,14 @@ tasks.withType(JavaCompile).configureEach {
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'io.spring.dependency-management'
+
+	dependencyManagement {
+		imports {
+			mavenBom SpringBootPlugin.BOM_COORDINATES
+			mavenBom "org.testcontainers:testcontainers-bom:$testcontainersVersion"
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
+	}
 
 	dependencies {
 		compileOnly "org.projectlombok:lombok:$lombokVersion"
