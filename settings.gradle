@@ -2,3 +2,4 @@ rootProject.name = 'spring-commerce-microservices'
 
 include 'product-service'
 include 'order-service'
+include 'inventory_service'

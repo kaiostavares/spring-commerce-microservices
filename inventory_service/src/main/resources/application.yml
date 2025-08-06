@@ -1,9 +1,9 @@
 server:
-  port: 8081
+  port: 8082
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/order_service
+    url: jdbc:mysql://localhost:3306/inventory_service
     username: root
     password: password
   jpa:
