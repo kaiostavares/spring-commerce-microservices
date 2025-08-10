@@ -20,10 +20,40 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./docker/database/mysql:/docker-entrypoint-initdb.d
-
+  keycloak-mysql:
+    image: mysql:8.4
+    container_name: keycloak-mysql
+    ports:
+      - "3307:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: keycloak
+        MYSQL_USER: keycloak
+        MYSQL_PASSWORD: password
+    volumes:
+      - keycloak_mysql_data:/var/lib/mysql
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3.2
+    container_name: keycloak
+    command: ["start-dev", "--import-realm"]
+    ports:
+        - "8181:8080"
+    environment:
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://keycloak-mysql:3306/keycloak?useSSL=false&allowPublicKeyRetrieval=true
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    volumes:
+      - ./docker/keycloak/realms:/opt/keycloak/data/import
+    depends_on:
+      - keycloak-mysql
 volumes:
   mongo_data:
     driver: local
   mysql_data:
+    driver: local
+  keycloak_mysql_data:
     driver: local
 
